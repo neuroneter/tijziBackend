@@ -1,5 +1,5 @@
 fastapi
 uvicorn
-pydantic
 httpx
 python-dotenv
+pydantic-settings
