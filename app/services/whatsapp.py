@@ -2,6 +2,7 @@ import httpx
 from app.config import settings
 
 def send_whatsapp_message(phone_number: str, code: str) -> bool:
+    print("Enviando a número:", phone_number)
     url = f"https://graph.facebook.com/v19.0/{settings.PHONE_NUMBER_ID}/messages"
     headers = {
         "Authorization": f"Bearer {settings.ACCESS_TOKEN}",
