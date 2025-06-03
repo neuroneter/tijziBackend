@@ -1,4 +1,3 @@
-
 import httpx
 from app.config import settings
 
@@ -8,6 +7,7 @@ def send_whatsapp_message(phone_number: str, code: str) -> bool:
         "Authorization": f"Bearer {settings.ACCESS_TOKEN}",
         "Content-Type": "application/json"
     }
+
     payload = {
         "messaging_product": "whatsapp",
         "to": phone_number,
@@ -15,14 +15,35 @@ def send_whatsapp_message(phone_number: str, code: str) -> bool:
         "template": {
             "name": settings.TEMPLATE_NAME,
             "language": {"code": "es"},
-            "components": [{
-                "type": "body",
-                "parameters": [{"type": "text", "text": code}]
-            }]
+            "components": [
+                {
+                    "type": "body",
+                    "parameters": [
+                        {
+                            "type": "text",
+                            "text": code
+                        }
+                    ]
+                },
+                {
+                    "type": "button",
+                    "sub_type": "url",
+                    "index": 0,
+                    "parameters": [
+                        {
+                            "type": "text",
+                            "text": code
+                        }
+                    ]
+                }
+            ]
         }
     }
+
     try:
         response = httpx.post(url, json=payload, headers=headers)
+        print("WhatsApp API response:", response.status_code, response.text)  # 👈 para debugging
         return response.status_code == 200
-    except Exception:
+    except Exception as e:
+        print("WhatsApp API error:", str(e))  # 👈 para debugging
         return False
