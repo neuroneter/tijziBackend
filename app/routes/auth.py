@@ -9,6 +9,7 @@ auth_router = APIRouter()
 otp_service = OTPService()
 
 class SendCodeRequest(BaseModel):
+    country_code: str
     phone_number: str
 
 class VerifyCodeRequest(BaseModel):
@@ -17,8 +18,9 @@ class VerifyCodeRequest(BaseModel):
 
 @auth_router.post("/send-code")
 def send_code(request: SendCodeRequest):
-    code = otp_service.generate_and_store_code(request.phone_number)
-    success = send_whatsapp_message(request.phone_number, code)
+    full_number = f"{request.country_code}{request.phone_number}"
+    code = otp_service.generate_and_store_code(full_number)
+    success = send_whatsapp_message(full_number, code)
     if not success:
         raise HTTPException(status_code=500, detail="Failed to send WhatsApp message.")
     return {"message": "Code sent successfully"}
