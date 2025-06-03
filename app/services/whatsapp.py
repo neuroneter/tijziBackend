@@ -42,8 +42,8 @@ def send_whatsapp_message(phone_number: str, code: str) -> bool:
 
     try:
         response = httpx.post(url, json=payload, headers=headers)
-        print("WhatsApp API response:", response.status_code, response.text)  # 👈 para debugging
+        print("WhatsApp API response:", response.status_code, response.text)  # 🔍 LOG COMPLETO
         return response.status_code == 200
     except Exception as e:
-        print("WhatsApp API error:", str(e))  # 👈 para debugging
+        print("WhatsApp EXCEPTION:", str(e))  # 🔍 LOG EN CASO DE FALLO TOTAL
         return False
